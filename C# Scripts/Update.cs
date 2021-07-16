@@ -47,7 +47,6 @@ public class Update : TileMap
 
 		InitBoard();
 	}
-	public void test(){}
 	
 	public override void _Process(float delta)
   {
