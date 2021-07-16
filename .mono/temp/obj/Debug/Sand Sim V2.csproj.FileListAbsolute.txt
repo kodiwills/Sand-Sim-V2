@@ -1,0 +1,16 @@
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\bin\Debug\Sand Sim V2.dll
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\bin\Debug\Sand Sim V2.pdb
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.csproj.AssemblyReference.cache
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.AssemblyInfoInputs.cache
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.AssemblyInfo.cs
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.csproj.CoreCompileInputs.cache
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.dll
+C:\Users\chris\Documents\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.pdb
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\bin\Debug\Sand Sim V2.dll
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\bin\Debug\Sand Sim V2.pdb
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.csproj.AssemblyReference.cache
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.AssemblyInfoInputs.cache
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.AssemblyInfo.cs
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.csproj.CoreCompileInputs.cache
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.dll
+C:\Users\chris\Documents\Godot Projects\Sand Sim V2\.mono\temp\obj\Debug\Sand Sim V2.pdb
