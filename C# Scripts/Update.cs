@@ -101,9 +101,12 @@ public class Update : TileMap
 		if (inputEvent is InputEventMouseMotion motionEvent && dragging)
 		{
 			Vector2 pos = (GetLocalMousePosition() / TILE_SIZE).Floor();
-			Vector2 chunkPos = (pos / CHUNK_SIZE).Floor();
-			Chunk chunk = chunks[(int)((chunkPos.y * CHUNK_GRID_SIZE.y) + chunkPos.x)];
-			Brush(pos, chunk);
+			if (pos.x < width && pos.y < height && pos.x > -1 && pos.y > -1)
+			{
+				Vector2 chunkPos = (pos / CHUNK_SIZE).Floor();
+				Chunk chunk = chunks[(int)((chunkPos.y * CHUNK_GRID_SIZE.y) + chunkPos.x)];
+				Brush(pos, chunk);
+			}
 		}
     }
 
@@ -274,18 +277,8 @@ public class Update : TileMap
 		tiles[pos2].updated = true;
 		updatedTiles.Enqueue(tiles[pos2]);
 
-		// Update the dirty rect of the chunks
-		Vector2 top = chunk.rectTop;
-		Vector2 bottom = chunk.rectBottom;
-		Vector2 pos = pos2 - (CHUNK_SIZE * chunk.position);
-
-		float x = Mathf.Clamp(Math.Min(pos.x, top.x), 0, 63);
-		float y = Mathf.Clamp(Math.Min(pos.y, top.y), 0, 63);
-		chunk.rectTop = new Vector2(x, y);
-
-		x = Mathf.Clamp(Math.Max(pos.x, bottom.x), 0, 63);
-		y = Mathf.Clamp(Math.Max(pos.y, bottom.y), 0, 63);
-		chunk.rectBottom = new Vector2(x, y);
+		UpdateDirtyRect(pos1, chunk);
+		UpdateDirtyRect(pos2, chunk);
 	}
 
 	private void Brush(Vector2 pos, Chunk chunk)
@@ -294,9 +287,91 @@ public class Update : TileMap
 		SetCellv(pos, currentTile);
 
 		chunk.active = true;
-		Vector2 top = chunk.rectTop;
-		Vector2 bottom = chunk.rectBottom;
-		Vector2 offsetPos = pos - (CHUNK_SIZE * chunk.position);
+		UpdateDirtyRect(pos, chunk);
+	}
+
+	private void UpdateDirtyRect(Vector2 pos, Chunk chunk)
+	{
+		Vector2 bounds = chunk.position * CHUNK_SIZE;
+		Vector2 xBounds = new Vector2(bounds.x, bounds.x + CHUNK_SIZE - 1);
+		Vector2 yBounds = new Vector2(bounds.y, bounds.y + CHUNK_SIZE - 1);
+		Vector2 top;
+		Vector2 bottom;
+		Vector2 offsetPos;
+
+		// May cause a crash if the pos is outside of the board width and height. It should not ever be out of that range but be aware
+		// Doesnt account for a tile moving to the diagonal chunk
+		// Chunk to the left
+		if (pos.x < xBounds.x)
+		{
+			Vector2 chunkPos = chunk.position;
+			chunk = chunks[(int)((chunkPos.y * CHUNK_GRID_SIZE.y) + chunkPos.x - 1)];
+			bounds = new Vector2(chunkPos.x - 1, chunkPos.y) * CHUNK_SIZE;
+
+			top = chunk.rectTop;
+			bottom = chunk.rectBottom;
+			offsetPos = pos - bounds;
+
+			if (!chunk.active)
+			{
+				chunk.active = true;
+			}
+		}
+		// Right
+		else if (pos.x > xBounds.y)
+		{
+			Vector2 chunkPos = chunk.position;
+			chunk = chunks[(int)((chunkPos.y * CHUNK_GRID_SIZE.y) + chunkPos.x + 1)];
+			bounds = new Vector2(chunkPos.x + 1, chunkPos.y) * CHUNK_SIZE;
+
+			top = chunk.rectTop;
+			bottom = chunk.rectBottom;
+			offsetPos = pos - bounds;
+
+			if (!chunk.active)
+			{
+				chunk.active = true;
+			}
+		}
+		// Below
+		else if (pos.y < yBounds.x)
+		{
+			Vector2 chunkPos = chunk.position;
+			chunk = chunks[(int)(((chunkPos.y - 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
+			bounds = new Vector2(chunkPos.x, chunkPos.y - 1) * CHUNK_SIZE;
+
+			top = chunk.rectTop;
+			bottom = chunk.rectBottom;
+			offsetPos = pos - bounds;
+
+			if (!chunk.active)
+			{
+				chunk.active = true;
+			}
+		}
+		// Above
+		else if (pos.y > yBounds.y)
+		{
+			Vector2 chunkPos = chunk.position;
+			chunk = chunks[(int)(((chunkPos.y + 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
+			bounds = new Vector2(chunkPos.x + 1, chunkPos.y + 1) * CHUNK_SIZE;
+
+			top = chunk.rectTop;
+			bottom = chunk.rectBottom;
+			offsetPos = pos - bounds;
+
+			if (!chunk.active)
+			{
+				chunk.active = true;
+			}
+		}
+		// Within current chunk bounds
+		else
+		{
+			top = chunk.rectTop;
+			bottom = chunk.rectBottom;
+			offsetPos = pos - bounds;
+		}
 
 		float x = Mathf.Clamp(Math.Min(offsetPos.x, top.x), 0, 63);
 		float y = Mathf.Clamp(Math.Min(offsetPos.y, top.y), 0, 63);
