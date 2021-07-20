@@ -19,7 +19,7 @@ public class Update : TileMap
 
 	public int CHUNK_SIZE = 64;
 	public const int TILE_SIZE = 8;
-	Vector2 CHUNK_GRID_SIZE = new Vector2(2, 1);
+	Vector2 CHUNK_GRID_SIZE = new Vector2(2, 2);
 	bool playing = false;
 	bool dragging = false;
 	int currentTile = 1;
@@ -154,7 +154,9 @@ public class Update : TileMap
 				{
 					for (int x = (int)top.x; x < bottom.x + 1; x++)
 					{
-						currentChunk.updateList.Enqueue(new Vector2(x + offset.x, y + offset.y));
+						if(GetCell(x + (int)offset.x, y + (int)offset.y) != 0){
+							currentChunk.updateList.Enqueue(new Vector2(x + offset.x, y + offset.y));
+						}
 					}
 				}
 			}else
@@ -207,6 +209,7 @@ public class Update : TileMap
 			if (currentChunk.active)
 			{
 				// After all dirty rect calculations are complete add one tile to the size of the dirty rect
+				// This is to prevent situations in which tiles that still need to be updated are left behind
 				Vector2 top = currentChunk.rectTop;
 				Vector2 bottom = currentChunk.rectBottom;
 				Vector2 bounds = currentChunk.position * CHUNK_SIZE;
@@ -350,8 +353,8 @@ public class Update : TileMap
 		// Below
 		else if (relativePos.y > CHUNK_SIZE - 1)
 		{
-			chunk = chunks[(int)(((chunkPos.y - 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
-			bounds = new Vector2(chunkPos.x, chunkPos.y - 1) * CHUNK_SIZE;
+			chunk = chunks[(int)(((chunkPos.y + 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
+			bounds = new Vector2(chunkPos.x, chunkPos.y + 1) * CHUNK_SIZE;
 
 			top = chunk.rectTop;
 			bottom = chunk.rectBottom;
@@ -365,8 +368,8 @@ public class Update : TileMap
 		// Above
 		else if (relativePos.y < 0)
 		{
-			chunk = chunks[(int)(((chunkPos.y + 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
-			bounds = new Vector2(chunkPos.x + 1, chunkPos.y + 1) * CHUNK_SIZE;
+			chunk = chunks[(int)(((chunkPos.y - 1) * CHUNK_GRID_SIZE.y) + chunkPos.x)];
+			bounds = new Vector2(chunkPos.x, chunkPos.y - 1) * CHUNK_SIZE;
 
 			top = chunk.rectTop;
 			bottom = chunk.rectBottom;
